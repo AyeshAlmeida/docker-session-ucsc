@@ -1,0 +1,20 @@
+# Define the base image - Here we are using JDK 14 installed Linux operating system image.
+FROM adoptopenjdk/openjdk14:x86_64-alpine-jdk14u-nightly-slim
+
+# Comments regarding newly added images - optional
+MAINTAINER ayesh almeida
+
+# Copy the required content
+COPY ./target/docker-sample-app /opt/app
+
+# Provide required permissions | Run required commands for environment setup
+RUN chmod 500 /opt/app/bin/*
+
+# Change the working directory to required directory
+WORKDIR /opt/app/bin/
+
+# Define the command to be run when image converted to container
+CMD ["sh", "docker-sample-app", "console"]
+
+# Expose ports required to communicate with outside world
+EXPOSE 10011

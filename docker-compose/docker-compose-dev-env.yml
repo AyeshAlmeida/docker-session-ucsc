@@ -1,0 +1,41 @@
+version: '3.7'
+
+services:
+#  Defining DB Setup for Application
+  employee_mng_db:
+    image: "mysql:8.0.13"
+#    Defining and alising networks related to application depoyment
+    networks:
+      emp-mng-mesh:
+        aliases:
+          - mng-mysql-mesh
+    restart: always
+#    Port mapping - related to outside communications (not for inter container communication)
+    ports:
+      - "3307:3306"
+#    MySQL related environment variables
+    environment:
+      MYSQL_ROOT_PASSWORD: "password"
+      MYSQL_USER: "db_user"
+      MYSQL_PASSWORD: "password_123#"
+      MYSQL_DATABASE: "employee_mng_db"
+
+# Defining the service or the application
+  employee_mng_service:
+#    Base Image for application
+    image: "simple-web-service:0.0.1"
+    ports:
+    - "10011:10011"
+#    Defining dependencies this application need to before it starts - these should be defined
+#    with service names in docker-compose file
+    depends_on:
+      - employee_mng_db
+    restart: always
+    networks:
+      emp-mng-mesh:
+        aliases:
+          - emp-service-mesh
+
+#    Docker Network
+networks:
+  emp-mng-mesh: {}
