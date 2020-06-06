@@ -17,3 +17,15 @@ to understand the basic docerization of a web-application.
 ```bash
     mvn clean install
 ```
+
+* Go into ```target/docker-sample-app```.
+
+```bash
+    cd target/docker-sample-app
+```
+
+* Run following command.
+
+```bash
+    ./bin/docker-sample-app start;
+```
