@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.3.0.RELEASE</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+
+    <groupId>hms.sessions</groupId>
+    <artifactId>docker-session-ucsc</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>docker-session-ucsc</name>
+    <description>Sample Code Base for Introduction to Docker Tech-Talk.</description>
+
+    <properties>
+        <maven.source.version>14</maven.source.version>
+        <java.version>14</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <resource.file.location>.</resource.file.location>
+        <resource.concat.dir>target/generated-resources/appassembler/resources</resource.concat.dir>
+        <jsw.assemble.dir>target/generated-resources/appassembler/jsw</jsw.assemble.dir>
+        <appassembler.basedir>target/generated-resources/appassembler/jsw/docker-sample-app</appassembler.basedir>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.20</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.junit.vintage</groupId>
+                    <artifactId>junit-vintage-engine</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <excludes>
+                        <exclude>*.conf</exclude>
+                        <exclude>*.properties</exclude>
+                        <exclude>*.xml</exclude>
+                        <exclude>*.yml</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>appassembler-maven-plugin</artifactId>
+                <version>1.0</version>
+                <configuration>
+                    <repoPath>lib</repoPath>
+                    <repositoryLayout>flat</repositoryLayout>
+                    <assembleDirectory>${jsw.assemble.dir}</assembleDirectory>
+                    <daemons>
+                        <daemon>
+                            <id>docker-sample-app</id>
+                            <mainClass>hms.sessions.dockersessionucsc.DockerSessionUcscApplication</mainClass>
+                            <platforms>
+                                <platform>jsw</platform>
+                            </platforms>
+
+                            <jvmSettings>
+                                <extraArguments>
+                                    <extraArgument>-Xms256m</extraArgument>
+                                    <extraArgument>-Xmx256m</extraArgument>
+                                </extraArguments>
+                            </jvmSettings>
+
+
+                            <generatorConfigurations>
+                                <generatorConfiguration>
+                                    <generator>jsw</generator>
+                                    <configuration>
+                                        <property>
+                                            <name>wrapper.java.mainclass</name>
+                                            <value>org.tanukisoftware.wrapper.WrapperSimpleApp</value>
+                                        </property>
+
+                                        <property>
+                                            <name>wrapper.app.parameter.1</name>
+                                            <value>hms.sessions.dockersessionucsc.DockerSessionUcscApplication</value>
+                                        </property>
+
+                                        <property>
+                                            <name>configuration.directory.in.classpath.first</name>
+                                            <value>conf</value>
+                                        </property>
+                                        <property>
+                                            <name>set.default.REPO_DIR</name>
+                                            <value>lib</value>
+                                        </property>
+                                        <property>
+                                            <name>wrapper.logfile</name>
+                                            <value>logs/wrapper.log</value>
+                                        </property>
+                                        <property>
+                                            <name>wrapper.startup.timeout</name>
+                                            <value>0</value>
+                                        </property>
+                                        <property>
+                                            <name>wrapper.ping.timeout</name>
+                                            <value>60</value>
+                                        </property>
+                                    </configuration>
+                                    <includes>
+                                        <include>linux-x86-64</include>
+                                    </includes>
+                                </generatorConfiguration>
+                            </generatorConfigurations>
+                        </daemon>
+                    </daemons>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>generate-daemons</goal>
+                            <goal>create-repository</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.6</version>
+                <executions>
+                    <execution>
+                        <id>make-log-dir</id>
+                        <phase>package</phase>
+                        <configuration>
+                            <tasks>
+                                <mkdir dir="${appassembler.basedir}/logs" />
+                                <mkdir dir="target/docker-sample-app/logs" />
+
+                                <copy todir="target/docker-sample-app/bin" overwrite="true">
+                                    <fileset dir="${jsw.assemble.dir}/docker-sample-app/bin" />
+                                </copy>
+                                <copy todir="target/docker-sample-app/lib" overwrite="true">
+                                    <fileset dir="${jsw.assemble.dir}/lib" />
+                                </copy>
+                                <copy todir="target/docker-sample-app/lib" overwrite="true">
+                                    <fileset dir="${jsw.assemble.dir}/docker-sample-app/lib" />
+                                </copy>
+                                <copy todir="target/docker-sample-app/conf" overwrite="true">
+                                    <fileset dir="${jsw.assemble.dir}/docker-sample-app/conf" />
+                                </copy>
+                                <copy todir="target/docker-sample-app/conf" overwrite="true">
+                                    <fileset dir="src/main/resources" />
+                                </copy>
+                                <copy todir="${appassembler.basedir}/conf">
+                                    <fileset dir="target/docker-sample-app/conf" />
+                                </copy>
+                                <chmod dir="target/docker-sample-app/bin" perm="777" includes="**/**" />
+                            </tasks>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.1</version>
+                <configuration>
+                    <finalName>${project.artifactId}</finalName>
+                    <descriptors>
+                        <descriptor>src/main/assembly/dep.xml</descriptor>
+                    </descriptors>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
