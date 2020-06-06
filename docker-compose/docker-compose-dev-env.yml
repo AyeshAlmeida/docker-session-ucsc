@@ -22,19 +22,7 @@ services:
 
 # Defining the service or the application
   employee_mng_service:
-#    Base Image for application
-    image: "simple-web-service:0.0.1"
-    ports:
-    - "10011:10011"
-#    Defining dependencies this application need to before it starts - these should be defined
-#    with service names in docker-compose file
-    depends_on:
-      - employee_mng_db
-    restart: always
-    networks:
-      emp-mng-mesh:
-        aliases:
-          - emp-service-mesh
+
 
 #    Docker Network
 networks:
