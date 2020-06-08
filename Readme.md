@@ -29,3 +29,15 @@ to understand the basic docerization of a web-application.
 ```bash
     ./bin/docker-sample-app start;
 ```
+
+## How to use this setup for learning ##
+
+* In GIT checkout to ```initial``` branch.
+
+* All the docker related configurations will be empty there.
+
+* Try to Fill them up and run the system.
+
+* If you ever forget anything, check out to ```complete``` branch in GIT and refresh.
+
+* All used commands in session could be found [here](guides/used-commands.md)
