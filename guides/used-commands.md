@@ -3,7 +3,7 @@
 * Run ```MySQL 8``` in ```docker```.
 
 ```shell script
-    docker run --name=mysql-dev-session -p 3308:3306 -e MYSQL_ROOT_PASSWORD=password -d mysql/mysql-server:8.0.13
+    docker run --name=mysql-dev-session -p 3306:3306 -e MYSQL_ROOT_PASSWORD=password -d mysql/mysql-server:8.0.13
 ```
 
 * Log into ```MySQL``` using ```docker```.
