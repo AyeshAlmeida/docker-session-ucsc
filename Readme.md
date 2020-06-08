@@ -70,3 +70,15 @@ web browser.
 ```bash
     docker-compose -f docker-compose-dev-env.yml up
 ```
+
+## How to use this setup for learning ##
+
+* In GIT checkout to ```initial``` branch.
+
+* All the docker related configurations will be empty there.
+
+* Try to Fill them up and run the system.
+
+* If you ever forget anything, check out to ```complete``` branch in GIT and refresh.
+
+* All used commands in session could be found [here](guides/used-commands.md)
