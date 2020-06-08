@@ -6,6 +6,12 @@
     docker run --name=mysql-dev-session -p 3308:3306 -e MYSQL_ROOT_PASSWORD=password -d mysql/mysql-server:8.0.13
 ```
 
+* Log into ```MySQL``` using ```docker```.
+
+```shell script
+    docker exec -it mysql-dev-session mysql -uroot -ppassword
+```
+
 * Verify your ```docker``` installation.
 
 ```shell script
