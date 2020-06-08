@@ -70,3 +70,11 @@ web browser.
 ```bash
     docker-compose -f docker-compose-dev-env.yml up
 ```
+
+## How to use this setup for learning ##
+
+* Complete ```docker/Dockerfile.server``` and test the ```docker build```.
+
+* Complete ```docker-compose/docker-compose-dev-env.yml``` and test ```docker compose```.
+
+* All used commands in session could be found [here](guides/used-commands.md)
