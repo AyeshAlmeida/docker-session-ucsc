@@ -25,3 +25,33 @@
     GRANT ALL PRIVILEGES ON *.* TO 'db_user'@'%' WITH GRANT OPTION;
     CREATE DATABASE `employee_mng_db`;
 ```
+
+* List all running ```docker containers```.
+
+```shell script
+    docker ps -a
+```
+
+* To start a existing container.
+
+```shell script
+    docker start <container-name>
+```
+
+* To stop a running container.
+
+```shell script
+    docker stop <container-name>
+```
+
+* To remove a stopped container.
+
+```shell script
+    docker container rm <container-name>
+```
+
+* To list all existing ```docker images```.
+
+```shell script
+    docker images
+```
