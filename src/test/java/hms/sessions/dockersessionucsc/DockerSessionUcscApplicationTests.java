@@ -3,10 +3,10 @@ package hms.sessions.dockersessionucsc;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
+//@SpringBootTest
 class DockerSessionUcscApplicationTests {
 
-    @Test
+//    @Test
     void contextLoads() {
     }
 
